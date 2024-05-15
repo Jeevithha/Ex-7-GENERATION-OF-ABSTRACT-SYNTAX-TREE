@@ -1,10 +1,10 @@
 # Ex-7-GENERATION OF ABSTRACT SYNTAX TREE
-# NAME: JEEVITHA S
-# REGISTER NUMBER: 212222100016
-# Date:20.03.2024
-# Aim: 
+## NAME: JEEVITHA S
+## REGISTER NUMBER: 212222100016
+## Date:20.03.2024
+## Aim: 
 To write a program to convert the BNF rules into YACC form and to generate Abstract Syntax Tree.
-# ALGORITHM
+## ALGORITHM
 1.	Start the program.
 2.	Write a program in the vi editor and save it with .l extension.
 3.	In the lex program, write the translation rules for the keywords, identifiers and relational operators.
@@ -17,7 +17,7 @@ To write a program to convert the BNF rules into YACC form and to generate Abstr
 7.	Compile the yacc program with yacc compiler to produce output file as y.tab.c. eg $ yacc –d arith_id.y
 8.	Compile these with the C compiler as gcc lex.yy.c y.tab.c
 9.	A C program is given as input and the abstract syntax tree is generated as output.
-# PROGRAM
+## PROGRAM
 Program:int.| file
 ```
 %{
@@ -26,32 +26,24 @@ Program:int.| file
 #include <string.h>
 int LineNo=1;
 %}
-
 identifier [a-zA-Z][_a-zA-Z0-9]*
 number [0-9]+|([0-9]*\.[0-9]+)
-
 %%
-
 main\(\) { return MAIN; }
 if { return IF; }
 else { return ELSE; }
 while { return WHILE; }
 int|char|float { return TYPE; }
-
 {identifier} { strcpy(yylval.var,yytext); return VAR; }
 {number} { strcpy(yylval.var,yytext); return NUM; }
-
 \< { return '<'; }
 \> { return '>'; }
 \>= { return ">="; }
 \<= { return "<="; }
 == { return "=="; }
-
 [ \t] ;
 \n { LineNo++; }
-
 . { return yytext[0]; }
-
 %%
 ```
 Program: int.y file
@@ -59,7 +51,6 @@ Program: int.y file
 %{
 #include <string.h>
 #include <stdio.h>
-
 struct quad {
     char op[5];
     char arg1[10];
@@ -71,46 +62,33 @@ struct stack {
     int items[100];
     int top;
 } stk;
-
 int Index=0, tIndex=0, StNo, Ind, tInd;
 extern int LineNo;
-
 void push(int data);
 int pop();
 void AddQuadruple(char op[5],char arg1[10],char arg2[10],char result[10]);
 %}
-
 %union {
     char var[10];
 }
-
 %token <var> NUM VAR RELOP
 %token MAIN IF ELSE WHILE TYPE
 %type <var> EXPR ASSIGNMENT CONDITION IFST ELSEST WHILELOOP
-
 %left '-' '+'
 %left '*' '/'
-
 %%
-
 PROGRAM : MAIN BLOCK ;
-
 BLOCK: '{' CODE '}' ;
-
 CODE: BLOCK
      | STATEMENT CODE
      | STATEMENT ;
-
 STATEMENT: DESCT ';'
           | ASSIGNMENT ';'
           | CONDST
           | WHILEST ;
-
 DESCT: TYPE VARLIST ;
-
 VARLIST: VAR ',' VARLIST
        | VAR ;
-
 ASSIGNMENT: VAR '=' EXPR {
     strcpy(QUAD[Index].op,"=");
     strcpy(QUAD[Index].arg1,$1);
@@ -118,7 +96,6 @@ ASSIGNMENT: VAR '=' EXPR {
     strcpy(QUAD[Index].result,$3);
     Index++;
 } ;
-
 EXPR: EXPR '+' EXPR
     | EXPR '-' EXPR
     | EXPR '*' EXPR
@@ -127,10 +104,8 @@ EXPR: EXPR '+' EXPR
     | '(' EXPR ')'
     | VAR
     | NUM ;
-
 CONDST: IFST
       | IFST ELSEST ;
-
 IFST: IF '(' CONDITION ')' BLOCK {
     strcpy(QUAD[Index].op,"==");
     strcpy(QUAD[Index].arg1,$3);
@@ -139,21 +114,14 @@ IFST: IF '(' CONDITION ')' BLOCK {
     push(Index);
     Index++;
 } ;
-
 ELSEST: ELSE BLOCK ;
-
 CONDITION: VAR RELOP VAR
          | VAR
          | NUM ;
-
 WHILEST: WHILELOOP ;
-
 WHILELOOP: WHILE '(' CONDITION ')' BLOCK ;
-
 %%
-
 extern FILE *yyin;
-
 int main(int argc,char *argv[]) {
     FILE *fp;
     int i;
@@ -174,7 +142,6 @@ int main(int argc,char *argv[]) {
     printf("\n\n");
     return 0;
 }
-
 void push(int data) {
     stk.top++;
     if(stk.top == 100) {
@@ -183,7 +150,6 @@ void push(int data) {
     }
     stk.items[stk.top] = data;
 }
-
 int pop() {
     int data;
     if(stk.top == -1) {
@@ -193,7 +159,6 @@ int pop() {
     data = stk.items[stk.top--];
     return data;
 }
-
 void AddQuadruple(char op[5],char arg1[10],char arg2[10],char result[10]) {
     strcpy(QUAD[Index].op,op);
     strcpy(QUAD[Index].arg1,arg1);
@@ -201,7 +166,6 @@ void AddQuadruple(char op[5],char arg1[10],char arg2[10],char result[10]) {
     strcpy(QUAD[Index].result,result);
     Index++;
 }
-
 void yyerror() {
     printf("\n Error on line no:%d",LineNo);
 }
@@ -223,10 +187,8 @@ main() {
     }
 }
 ```
-
-# Output
+## Output
 <img width="625" alt="image" src="https://github.com/manomadhivanan/Ex-7-GENERATION-OF-ABSTRACT-SYNTAX-TREE/assets/115543366/dd3bf8ae-d2df-4707-be20-7410abd5e0e9">
 
-# Result
+## Result
 Conversion of the BNF rules into YACC form and to generate Abstract Syntax Tree is implemented.
-
